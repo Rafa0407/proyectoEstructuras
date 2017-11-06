@@ -7,7 +7,7 @@ using namespace std;
 
 Estudiantes est = Estudiantes();
 Matricula matrricula; 
-RegistroEstudiantes regEstudiantes = RegistroEstudiantes();
+RegistroEstudiantes regEstudiantes;
 
 int main() {
 	int opc, salir = 0;

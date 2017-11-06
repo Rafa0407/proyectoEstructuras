@@ -11,35 +11,35 @@ using std::ofstream;
 
 class RegistroEstudiantes {
 
+private:
+
 public:
 	int cantidadEstudiantes;
 	RegistroEstudiantes() {
-
 		this->cantidadEstudiantes = 0;
 	}
 	~RegistroEstudiantes() {
-		
 	}
 
 	// FUNCIONES PARA EL REGISTRO DE ESTUDIANTES
 	int obtenerHash(int numeroCedula) { // funcion que retorna el hash de cedula 
 		return numeroCedula % 99;
 	}
-	Estudiantes buscarEstudiante(int cedulaValidar) { // busca el estudiante en el archivo por medio de la cedula
-		Estudiantes estudiante = Estudiantes();
-		fstream regCon("Estudiante.txt", ios::in | ios::out);
-		if (!regCon) {
-			cerr << "No se pudo abrir el archivo" << endl;
-			exit(1);
-		}
-		else {
-			int hash = obtenerHash(cedulaValidar); // llamada a hash
-			regCon.seekg(hash * sizeof(Estudiantes));
-			regCon.read(reinterpret_cast<char*>(&estudiante), sizeof(Estudiantes));
-		}
-		cout << "encontrado" << estudiante.cedula << endl;
-		return estudiante;
-	}
+	//Estudiantes buscarEstudiante(int cedulaValidar) { // busca el estudiante en el archivo por medio de la cedula
+	//	Estudiantes estudiante = Estudiantes();
+	//	fstream regCon("Estudiante.txt", ios::in | ios::out);
+	//	if (!regCon) {
+	//		cerr << "No se pudo abrir el archivo" << endl;
+	//		exit(1);
+	//	}
+	//	else {
+	//		int hash = obtenerHash(cedulaValidar); // llamada a hash
+	//		regCon.seekg(hash * sizeof(Estudiantes));
+	//		regCon.read(reinterpret_cast<char*>(&estudiante), sizeof(Estudiantes));
+	//	}
+	//	cout << "encontrado" << estudiante.cedula << endl;
+	//	return estudiante;
+	//}
 
 
 	Estudiantes ingresarDatos() { // metodo individual para ingresar los datos.. 
@@ -57,38 +57,41 @@ public:
 		return est;
 	}
 
-	void ingresar(Estudiantes &estudiante) { //recibe una cedula para validar antes de ser ingresado al archivo
+	void ingresar(Estudiantes &estudiante) { //recibe un estudiante y lo ingresa al archivo
 		system("cls");
-		Estudiantes estudianteBuscar = Estudiantes();
+		Estudiantes estudianteBuscar;
 		fstream regCon("Estudiante.txt", ios::in | ios::out);
-		ofstream regw("Estudiante.txt", ios::app);
-		if (!regCon && !regw) {
+		fstream regEnt("Estudiante.txt", ios::in | ios::out);
+		//ofstream regw("Estudiante.txt", ios::app);
+		if (!regCon) {
 			cout << "No se pudo abrir el archivo" << endl;
 			system("pause");
 			exit(1);
 		}
-		else {
-
-			if (cantidadEstudiantes <= 6) {
+		else { // valida primero si el estudiante que viene por parametro ya esta registrado
+			int hash = obtenerHash(estudiante.cedula);
+			regEnt.seekg(hash * sizeof(Estudiantes));
+			regEnt.read(reinterpret_cast<char *>(&estudianteBuscar), sizeof(Estudiantes));
+			// cout << "Cedula" << est.cedula << endl;
+			cout << "Este estudiante ya esta registrado!!" << endl;
+			cout << "-----------------------------------------------------------------------" << endl;
+			if (estudianteBuscar.cedula != 0) { // muestra el estudiante si esta registrado
+				cout << "\n\n\t\t\t" << left << setw(12) << "Nombre " << setw(10) << "Carrera \n" << endl;
+				imprimirLinea(cout, estudianteBuscar);
+				cout << "-----------------------------------------------------------------------" << endl;
+			}
+			else { // lo registrado sino esta!! 
+				cout << "El registro no se encuentra" << endl;
 				int hash = obtenerHash(estudiante.cedula);
-				cout << "cedula por busqueda" << estudianteBuscar.cedula << endl;
-				cout << "cedula del estudiante ingresado" << estudiante.cedula << endl;
-				if (estudianteBuscar.cedula == estudiante.cedula) {
-					cout << "El estudiante ya está registrado" << estudianteBuscar.cedula << endl;
-				}
+				regCon.seekp(hash * sizeof(Estudiantes));
+				regCon.write(reinterpret_cast <const char *>(&estudiante), sizeof(Estudiantes));
+				regCon.close();
+				this->cantidadEstudiantes++;
+				cout << "Registro Completo!" << endl;
+			}
 
-				else {
-					regw.seekp(hash * sizeof(Estudiantes));
-					regw.write(reinterpret_cast <const char *>(&estudiante), sizeof(Estudiantes));
-					regw.close();
-					cantidadEstudiantes++;
-					cout << "succes!" << endl;
-				}
-			}
-			else {
-				cout << "Maximo de estudiantes alcanzados" << endl;
-			}
 		}
+
 	}
 
 	void imprimirLinea(ostream &salida, Estudiantes &estudiante) {
@@ -121,9 +124,9 @@ public:
 	}
 
 	void consultar(int cedula) {
-		ifstream regCon("Estudiante.txt", ios::in);
-		Estudiantes est = Estudiantes();
-		if (!regCon) {
+		fstream regEnt("Estudiante.txt", ios::in | ios::out);
+		Estudiantes est;
+		if (!regEnt) {
 			cerr << "No se pudo abrir el archivo." << endl;
 			system("pause");
 			exit(1);
@@ -131,18 +134,19 @@ public:
 
 		else {
 			int hash = obtenerHash(cedula);
-			regCon.seekg(hash * sizeof(Estudiantes));
-			cout << "\n\n\t\t\t" << left << setw(12) << "Nombre " << setw(10) << "Carrera \n" << endl;
-			regCon.read(reinterpret_cast<char *>(&est), sizeof(Estudiantes));
+			regEnt.seekg(hash * sizeof(Estudiantes));
+			regEnt.read(reinterpret_cast<char *>(&est), sizeof(Estudiantes));
+			// cout << "Cedula" << est.cedula << endl;
 			cout << "-----------------------------------------------------------------------" << endl;
-			if (est.cedula == cedula) {
+			if (est.cedula != 0) {
+				cout << "\n\n\t\t\t" << left << setw(12) << "Nombre " << setw(10) << "Carrera \n" << endl;
 				imprimirLinea(cout, est);
 				cout << "-----------------------------------------------------------------------" << endl;
 			}
 			else {
 				cout << "El registro no se encuentra" << endl;
 			}
-			regCon.close();
+			regEnt.close();
 		}
 	}
 
