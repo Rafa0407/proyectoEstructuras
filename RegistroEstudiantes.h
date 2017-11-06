@@ -4,6 +4,7 @@
 #include <iomanip> //setw
 #include <string>
 #include <iostream>
+#include<Windows.h>
 #include"Estudiantes.h"
 using namespace std;
 using std::ofstream;
@@ -73,20 +74,22 @@ public:
 			regEnt.seekg(hash * sizeof(Estudiantes));
 			regEnt.read(reinterpret_cast<char *>(&estudianteBuscar), sizeof(Estudiantes));
 			// cout << "Cedula" << est.cedula << endl;
-			cout << "Este estudiante ya esta registrado!!" << endl;
 			cout << "-----------------------------------------------------------------------" << endl;
 			if (estudianteBuscar.cedula != 0) { // muestra el estudiante si esta registrado
+				cout << "Este estudiante ya esta registrado!!" << endl;
 				cout << "\n\n\t\t\t" << left << setw(12) << "Nombre " << setw(10) << "Carrera \n" << endl;
 				imprimirLinea(cout, estudianteBuscar);
 				cout << "-----------------------------------------------------------------------" << endl;
 			}
 			else { // lo registrado sino esta!! 
-				cout << "El registro no se encuentra" << endl;
+				
+				cout << "Proceda al registro" << endl;
 				int hash = obtenerHash(estudiante.cedula);
 				regCon.seekp(hash * sizeof(Estudiantes));
 				regCon.write(reinterpret_cast <const char *>(&estudiante), sizeof(Estudiantes));
 				regCon.close();
 				this->cantidadEstudiantes++;
+				Sleep(800);
 				cout << "Registro Completo!" << endl;
 			}
 
