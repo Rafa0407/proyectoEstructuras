@@ -3,12 +3,13 @@
 #include "Estudiantes.h" 
 #include "RegistroEstudiantes.h" 
 #include "Matricula.h" 
+#include "RegistroMatricula.h"
 using namespace std;
 
 Estudiantes est = Estudiantes();
-Matricula matrricula; 
 RegistroEstudiantes regEstudiantes;
-
+Matricula matr;
+RegistroMatricula regMatricula;
 int main() {
 	int opc, salir = 0;
 	int cedula = 0;
@@ -77,7 +78,8 @@ int main() {
 		case 3:
 			//CREAR MATRICULA
 			system("cls");
-
+			matr = regMatricula.ingresarDatosMatricula();
+			regMatricula.ingresar(matr);
 			system("pause");
 			break;
 		case 4:

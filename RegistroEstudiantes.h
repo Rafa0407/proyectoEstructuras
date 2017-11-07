@@ -26,22 +26,33 @@ public:
 	int obtenerHash(int numeroCedula) { // funcion que retorna el hash de cedula 
 		return numeroCedula % 99;
 	}
-	//Estudiantes buscarEstudiante(int cedulaValidar) { // busca el estudiante en el archivo por medio de la cedula
-	//	Estudiantes estudiante = Estudiantes();
-	//	fstream regCon("Estudiante.txt", ios::in | ios::out);
-	//	if (!regCon) {
-	//		cerr << "No se pudo abrir el archivo" << endl;
-	//		exit(1);
-	//	}
-	//	else {
-	//		int hash = obtenerHash(cedulaValidar); // llamada a hash
-	//		regCon.seekg(hash * sizeof(Estudiantes));
-	//		regCon.read(reinterpret_cast<char*>(&estudiante), sizeof(Estudiantes));
-	//	}
-	//	cout << "encontrado" << estudiante.cedula << endl;
-	//	return estudiante;
-	//}
 
+	void imprimirLinea(ostream &salida, Estudiantes &estudiante) {
+		salida << "\t\t\t" << left << setw(12) << estudiante.nombre << setw(17) << estudiante.carrera << "\n" << endl;
+	}
+
+	Estudiantes buscarEstudiante(int cedulaValidar) { // busca el estudiante en el archivo por medio de la cedula
+		Estudiantes estudiante = Estudiantes();
+		fstream regEnt("Estudiante.txt", ios::in | ios::out);
+		if (!regEnt) {
+			cerr << "No se pudo abrir el archivo" << endl;
+			exit(1);
+		}
+		else {
+			int hash = obtenerHash(cedulaValidar);
+			regEnt.seekg(hash * sizeof(Estudiantes));
+			regEnt.read(reinterpret_cast<char *>(&estudiante), sizeof(Estudiantes));
+			// cout << "Cedula" << est.cedula << endl;
+			/*cout << "-----------------------------------------------------------------------" << endl;*/
+			//if (estudiante.cedula != 0) { // muestra el estudiante si esta registrado
+			//	cout << "Este estudiante ya esta registrado!!" << endl;
+			//	cout << "\n\n\t\t\t" << left << setw(12) << "Nombre " << setw(10) << "Carrera \n" << endl;
+			//	imprimirLinea(cout, estudiante);
+			//	cout << "-----------------------------------------------------------------------" << endl;
+			//}
+			return estudiante;
+		}
+	}
 
 	Estudiantes ingresarDatos() { // metodo individual para ingresar los datos.. 
 		int cedula;
@@ -82,7 +93,6 @@ public:
 				cout << "-----------------------------------------------------------------------" << endl;
 			}
 			else { // lo registrado sino esta!! 
-				
 				cout << "Proceda al registro" << endl;
 				int hash = obtenerHash(estudiante.cedula);
 				regCon.seekp(hash * sizeof(Estudiantes));
@@ -92,14 +102,11 @@ public:
 				Sleep(800);
 				cout << "Registro Completo!" << endl;
 			}
-
 		}
 
 	}
 
-	void imprimirLinea(ostream &salida, Estudiantes &estudiante) {
-		salida << "\t\t\t" << left << setw(12) << estudiante.nombre << setw(17) << estudiante.carrera << "\n" << endl;
-	}
+
 	void mostrar() {
 		system("cls");
 		cout << "*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*" << endl;
