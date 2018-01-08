@@ -1,16 +1,24 @@
 #pragma once
+#include <cstring>
+#include <iomanip>
+#include <string>
+#include <iostream>
+using namespace std;
+
 class Matricula {
+
 public:
+
 	int cedula; //  #0###0###
 	short int ciclo; // ciclo 1 o 2
-	char fecha[10]; // dd/mm/aaaa
+	char fecha[11]; // dd/mm/aaaa
 	short int codigoCurso; // ###
-	char nombreCurso[15];
+	string nombreCurso;
 	short int grupo;
 	short int creditos;
 	short int estado; //0 para activo y 1 para error
 
-	Matricula(int cedula = 0, short int ciclo = 0, string fecha = "", short int codigoCurso = 0, string nombreCurso = "",
+	Matricula(int cedula = 0, short int ciclo = 0, string fecha = " ", short int codigoCurso = 0, string nombreCurso = " ",
 		short int grupo = 0, short int creditos = 0, short int estado = 0) {
 		setCedula(cedula);
 		setCiclo(ciclo);
@@ -35,17 +43,18 @@ public:
 	}
 
 	void setFecha(string fecha) {
-		const char *pFecha = fecha.data();
-		strncpy_s(this->fecha, pFecha, 10);
+		const char *pNombreCurso = fecha.data();
+		int tam = fecha.size();
+		strncpy_s(this->fecha, pNombreCurso, 11); // 8 por el formato de dd/mm/yy
+		//this->nombreCurso[8] = '\0';
 	}
 
 	void setCodigoCurso(short int codigoCurso) {
-		this->ciclo = ciclo;
+		this->codigoCurso = codigoCurso;
 	}
 
 	void setNombreCurso(string nombreCurso) {
-		const char *pNombreCurso = nombreCurso.data();
-		strncpy_s(this->nombreCurso, pNombreCurso, 15);
+		this->nombreCurso = nombreCurso;
 	}
 
 	void setGrupo(short int grupo) {

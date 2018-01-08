@@ -25,6 +25,11 @@ int main() {
 		cout << "Archivo Matricula creado correctamente" << endl;
 	}
 
+	ifstream regMatTmp("MatriculaTemporal.txt", ios::in);
+	if (!regMatTmp) {
+		ofstream("MatriculaTemporal.txt", ios::app);
+	}
+
 	while (salir == 0) {
 		system("cls");
 		system("color 0b");  //cambios al menu - rafa 
@@ -53,13 +58,10 @@ int main() {
 		case 1:
 			//CREAR ARCHIVOS
 			system("cls");
-
-			//ifstream regEst("Estudiante.txt", ios::in); //NO SE DEBE PONER XQ YA ESTA DECLARADO ARRIBA, SI SE PONE SERIA COMO INICIALIZAR 2 VECES
 			if (!regEst) {
 				ofstream("Estudiante.txt", ios::app);
 				cout << "Archivo Estudiante creado correctamente" << endl;
 			}
-			//ifstream regMat("Matricula.txt", ios::in); //NO SE DEBE PONER XQ YA ESTA DECLARADO ARRIBA, SI SE PONE SERIA COMO INICIALIZAR 2 VECES
 			if (!regMat) {
 				ofstream("Matricula.txt", ios::app);
 				cout << "Archivo Matricula creado correctamente" << endl;
@@ -68,9 +70,6 @@ int main() {
 			break;
 		case 2:
 			//CREAR REGISTRO DE ESTUDIANTES
-
-			//cout << "Ingrese cedula del estudiantes a ingresar" << endl;
-			//cin >> cedula;
 			est = regEstudiantes.ingresarDatos();
 			regEstudiantes.ingresar(est);
 			system("pause");
@@ -97,20 +96,20 @@ int main() {
 			break;
 		case 6:
 			//MOSTRAR MATRICULAS PENDIENTES
-			system("cls");
-
+			regMatricula.mostrarMatriculasPendientes();
 			system("pause");
 			break;
 		case 7:
 			//MODIFICAR MATRICULA
-			system("cls");
+			regMatricula.modificarMatricula();
+			regMat.close();
+
 
 			system("pause");
 			break;
 		case 8:
 			//ELIMINAR ARCHIVOS
 			system("cls");
-
 			//ELIMINA ARCHIVO ESTUDIANTE.TXT
 			regEst.close();
 			if (remove("Estudiante.txt") == 0)
@@ -124,11 +123,17 @@ int main() {
 				cout << "El archivo Matricula.txt fue eliminado correctamente" << endl;
 			else
 				cout << "Error al eliminar el archivo Matricula.txt" << endl;
-
 			system("pause");
 			break;
 		case 9:
 			//SALIR
+			system("cls");
+			cout << "\n\n\n\n\n\n\n\t\t     ELABORADPO  POR:\n" << endl; //muestra el mensaje cuando salga del programa.
+			Sleep(900);
+			cout << "\n\t\t\t\t   -ADALBERTO DELGADO MENDEZ\n\n";
+			Sleep(900);
+			cout << "\n\t\t\t\t   -RAFAEL SEQUEIRA GUTIERREZ";
+			Sleep(900);
 			salir = 1;
 			break;
 		}

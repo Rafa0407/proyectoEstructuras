@@ -22,7 +22,7 @@ public:
 	void setCedula(int cedula) {
 		this->cedula = cedula;
 	}
-	// setters y getters de miembros de datos 
+	// setters de miembros de datos 
 	void setNombre(string nombre) {
 		const char *pNombre = nombre.data();
 		int tam = nombre.size();
